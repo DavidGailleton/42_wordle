@@ -13,12 +13,12 @@ def main() -> int:
     """
     try:
         words = parsing("words.txt")
-        game = Game(words, {"tries": 6})
+        game = Game(words, 6)
         renderer = Renderer(game)
-        while True:
-            inputs = input_handler.get()
-            game.update(inputs)
-            renderer.update()
+        while renderer.is_running:
+            word = renderer.update()
+            if word is not None:
+                game.add_try(word)
         return 0
     except Exception as error:
         print(f"Error: {error}")

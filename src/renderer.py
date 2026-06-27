@@ -6,3 +6,4 @@ class Renderer:
         self.game = game
 
     def draw() -> None:
+        
