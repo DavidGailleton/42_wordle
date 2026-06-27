@@ -3,6 +3,7 @@ from time import perf_counter, sleep
 
 from .parsing import parsing
 from .game import Game
+from .renderer import Renderer
 
 
 def main() -> int:
@@ -17,11 +18,11 @@ def main() -> int:
         print(f"Error: {error}")
         return 1
 
-    # try:
-    words = parsing("words.txt")
-    game = Game(words, 6)
-    renderer = Renderer(game)
-    target_delta = 1.0 / 30
+    try:
+        words = parsing("words.txt")
+        game = Game(words, 6)
+        renderer = Renderer(game)
+        target_delta = 1.0 / 30
 
     while renderer.running:
         start = perf_counter()
@@ -32,7 +33,7 @@ def main() -> int:
             to_sleep = target_delta - elapsed
             sleep(to_sleep)
 
-    return 0
+        return 0
 
     # except Exception as error:
     #     print(f"Error: {error}")
