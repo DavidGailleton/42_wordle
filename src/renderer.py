@@ -1,11 +1,7 @@
 import pygame
 
 from .game import Game
-
-
-BACKGROUND_COLOR = (30, 30, 30)
-OUTER_LINE_COLOR = (100, 100, 100)
-CELL_COLOR = (40, 40, 40)
+from .colors import EColor
 
 CELLS_PADDING_RATIO = 0.05
 BORDER_PADDING_RATIO = 0.1
@@ -46,24 +42,32 @@ class Renderer:
                     if not len(self.buffer) < 5:
                         continue
                     self.buffer.append(event.unicode.lower())
-                    print(self.buffer)
+
                 elif event.key == pygame.K_BACKSPACE:
                     if len(self.buffer) == 0:
                         continue
                     self.buffer.pop()
-                    print(self.buffer)
+
+                elif event.key == pygame.K_RETURN and len(self.buffer) == 5:
+                    _try = ""
+                    for c in self.buffer:
+                        _try += c
+                    self.game.add_try(_try)
+                    self.buffer = []
 
         pygame.draw.rect(
             self.screen,
-            BACKGROUND_COLOR,
+            EColor.BACKGROUND.value,
             (0, 0, self.width, self.height)
         )
 
         for i in range(self.game.n_tries):
             y = self.start_y + i * (self.cell_size + self.cells_padding)
-            word = None
+            word: str | None = None
+            outer_line = True
             if i in range(len(self.game.tries)):
-                word = self.game.tries[i][1]
+                word = self.game.tries[i][0]
+                outer_line = False
             elif i == len(self.game.tries):
                 word = ""
                 for c in self.buffer:
@@ -74,26 +78,34 @@ class Renderer:
                     self.cell_size * j + \
                     self.cells_padding * j
 
-                pygame.draw.rect(
-                    self.screen,
-                    OUTER_LINE_COLOR,
-                    (x, y, self.cell_size, self.cell_size)
-                )
+                if outer_line:
+                    pygame.draw.rect(
+                        self.screen,
+                        EColor.OUTER_LINE.value,
+                        (x, y, self.cell_size, self.cell_size)
+                    )
 
-                cell_color = CELL_COLOR
+                cell_color = EColor.CELL.value
                 if i in range(len(self.game.tries)):
-                    cell_color = self.game.tries[i][1][j]
+                    cell_color = self.game.tries[i][1][j].value
 
-                pygame.draw.rect(
-                    self.screen,
-                    cell_color,
-                    (x + self.outer_line,
-                     y + self.outer_line,
-                     self.cell_size - self.outer_line * 2,
-                     self.cell_size - self.outer_line * 2)
-                )
+                if outer_line:
+                    pygame.draw.rect(
+                        self.screen,
+                        cell_color,
+                        (x + self.outer_line,
+                         y + self.outer_line,
+                         self.cell_size - self.outer_line * 2,
+                         self.cell_size - self.outer_line * 2)
+                    )
+                else:
+                    pygame.draw.rect(
+                        self.screen,
+                        cell_color,
+                        (x, y, self.cell_size, self.cell_size)
+                    )
 
-                if word:
+                if word is not None and len(word):
                     text = self.font.render(
                         word[j],
                         True,

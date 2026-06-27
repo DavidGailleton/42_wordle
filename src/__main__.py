@@ -14,7 +14,10 @@ def main() -> int:
     """
     try:
         pygame.init()
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     except Exception as error:
         print(f"Error: {error}")
         return 1
@@ -27,9 +30,7 @@ def main() -> int:
 
     while renderer.running:
         start = perf_counter()
-        word = renderer.update()
-        if word is not None:
-            game.add_try(word)
+        renderer.update()
         end = perf_counter()
         if end - start < target_delta:
             elapsed = end - start
@@ -39,11 +40,11 @@ def main() -> int:
     return 0
 
     # except Exception as error:
-    #    print(f"Error: {error}")
-    #    return 1
+    #     print(f"Error: {error}")
+    #     return 1
 
     # finally:
-    # pygame.quit()
+    #     pygame.quit()
 
 
 if __name__ == "__main__":
