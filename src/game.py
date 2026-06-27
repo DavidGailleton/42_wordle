@@ -7,7 +7,9 @@ from .classes.Exception import GameError
 
 class Game:
     def __init__(self, words: list[str], n_tries: int = 6) -> None:
-        self.word = random.choice(words)
+        self.words_set = set(words)
+        self.words_list = list(self.words_set)
+        self.word = random.choice(self.words_list)
         self.n_tries: int = n_tries
         self.tries: list[tuple[str, list[EColor]]] = []
 
@@ -21,7 +23,10 @@ class Game:
             return True
         return False
 
-    def add_try(self, _try: str) -> None:
+    def add_try(self, _try: str) -> bool:
+        if _try not in self.words_set:
+            return False
+
         _try = _try.lower()
 
         if self.is_ended():
@@ -62,3 +67,7 @@ class Game:
         if None in {c for c in res[1]}:
             raise GameError("Error during color calculation")
         self.tries.append(res)
+        return True
+
+    def new_word(self) -> None:
+        self.word = random.choice(self.words_list)
