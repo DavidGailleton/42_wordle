@@ -1,4 +1,5 @@
-"""Main entry point for the project."""
+import pygame
+from time import perf_counter, sleep
 
 from .parsing import parsing
 from .game import Game
@@ -18,6 +19,32 @@ def main() -> int:
     except Exception as error:
         print(f"Error: {error}")
         return 1
+
+    # try:
+    words = parsing("words.txt")
+    game = Game(words, 6)
+    renderer = Renderer(game)
+    target_delta = 1.0 / 30
+
+    while renderer.running:
+        start = perf_counter()
+        word = renderer.update()
+        if word is not None:
+            game.add_try(word)
+        end = perf_counter()
+        if end - start < target_delta:
+            elapsed = end - start
+            to_sleep = target_delta - elapsed
+            sleep(to_sleep)
+
+    return 0
+
+    # except Exception as error:
+    #    print(f"Error: {error}")
+    #    return 1
+
+    # finally:
+    # pygame.quit()
 
 
 if __name__ == "__main__":
