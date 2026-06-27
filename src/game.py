@@ -10,7 +10,7 @@ class Game:
         self.tries: list[tuple[str, list[EColor]]] = []
 
     def add_try(self, _try: str) -> None:
-        ...
+        pass
 
     def is_win(self) -> bool:
-        ...
+        pass
