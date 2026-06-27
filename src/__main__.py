@@ -1,6 +1,8 @@
 """Main entry point for the project."""
 
 from .parsing import parsing
+from .game import Game
+from .renderer import Renderer
 
 
 def main() -> int:
@@ -10,7 +12,13 @@ def main() -> int:
         Exit status code.
     """
     try:
-        print(parsing("words.txt"))
+        words = parsing("words.txt")
+        game = Game(words, {"tries": 6})
+        renderer = Renderer(game)
+        while True:
+            inputs = input_handler.get()
+            game.update(inputs)
+            renderer.update()
         return 0
     except Exception as error:
         print(f"Error: {error}")
