@@ -3,7 +3,6 @@ from time import perf_counter, sleep
 
 from .parsing import parsing
 from .game import Game
-from .renderer import Renderer
 
 
 def main() -> int:
@@ -13,8 +12,10 @@ def main() -> int:
         Exit status code.
     """
     try:
-        pygame.init()
-
+        words = parsing("words.txt")
+        game = Game(words)
+        game.add_try("hello")
+        return 0
     except Exception as error:
         print(f"Error: {error}")
         return 1
