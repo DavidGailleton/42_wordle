@@ -1,18 +1,6 @@
 """Main entry point for the project."""
 
-from typing import NoReturn
-
-
-def greet(name: str) -> str:
-    """Return a greeting message.
-
-    Args:
-        name: The name to greet.
-
-    Returns:
-        A formatted greeting string.
-    """
-    return f"Hello, {name}!"
+from .parsing import parsing
 
 
 def main() -> int:
@@ -22,8 +10,7 @@ def main() -> int:
         Exit status code.
     """
     try:
-        message = greet("42")
-        print(message)
+        print(parsing("words.txt"))
         return 0
     except Exception as error:
         print(f"Error: {error}")
