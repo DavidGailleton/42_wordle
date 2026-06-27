@@ -3,7 +3,6 @@ from time import perf_counter, sleep
 
 from .parsing import parsing
 from .game import Game
-from .renderer import Renderer
 
 
 def main() -> int:
