@@ -1,5 +1,4 @@
 import random
-import re
 
 from .colors import EColor
 
@@ -23,6 +22,8 @@ class Game:
         return False
 
     def add_try(self, _try: str) -> None:
+        _try = _try.lower()
+
         if self.is_ended():
             raise GameError("Try to add word but game already finish")
         if len(_try) != 5:
