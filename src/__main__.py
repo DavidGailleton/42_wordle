@@ -2,7 +2,6 @@
 
 from .parsing import parsing
 from .game import Game
-from .renderer import Renderer
 
 
 def main() -> int:
@@ -13,12 +12,8 @@ def main() -> int:
     """
     try:
         words = parsing("words.txt")
-        game = Game(words, {"tries": 6})
-        renderer = Renderer(game)
-        while True:
-            inputs = input_handler.get()
-            game.update(inputs)
-            renderer.update()
+        game = Game(words)
+        game.add_try("hello")
         return 0
     except Exception as error:
         print(f"Error: {error}")
