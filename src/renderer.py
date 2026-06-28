@@ -31,6 +31,7 @@ class Renderer:
             self.cells_padding * (self.game.n_tries)
         self.start_y = int((self.height - pannel_size) / 2)
         self.font = pygame.font.SysFont(None, int(FONT_RATIO * self.height))
+        self.red_percent = 0
 
     def end_screen(self) -> None:
         for event in pygame.event.get():
@@ -44,11 +45,13 @@ class Renderer:
                 self.buffer = []
                 return
 
-        pygame.draw.rect(
-            self.screen,
-            EColor.BACKGROUND.value,
-            (0, 0, self.width, self.height)
-        )
+        overlay = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+
+        pygame.draw.rect(overlay, (18, 18, 19, 50),
+                         (0, 0, self.width, self.height))
+
+        self.screen.blit(overlay, (0, 0))
+
         to_draw = ("You lost !", EColor.RED.value)
         if self.game.is_win():
             to_draw = ("You won !", EColor.GREEN.value)
@@ -64,12 +67,22 @@ class Renderer:
         self.screen.blit(text, rect)
 
         text = self.font.render(
-            f"The word was {self.game.word}",
+            f"The word was {self.game.word}.",
             True,
             (255, 255, 255)
         )
         cx = self.width // 2
         cy = int(self.height // 2.5) + self.end_screen_padding // 2
+        rect = text.get_rect(center=(cx, cy))
+        self.screen.blit(text, rect)
+
+        text = self.font.render(
+            "Restart [ENTER]",
+            True,
+            (255, 255, 255)
+        )
+        cx = self.width // 2
+        cy = self.height // 4 * 3
         rect = text.get_rect(center=(cx, cy))
         self.screen.blit(text, rect)
 
@@ -99,6 +112,8 @@ class Renderer:
                         _try += c
                     if self.game.add_try(_try):
                         self.buffer = []
+                    else:
+                        self.red_percent = 100
 
         pygame.draw.rect(
             self.screen,
@@ -133,6 +148,18 @@ class Renderer:
                 cell_color = EColor.CELL.value
                 if i in range(len(self.game.tries)):
                     cell_color = self.game.tries[i][1][j].value
+
+                if i == len(self.game.tries):
+                    cell_color = (
+                        cell_color[0] * (100 - self.red_percent) / 100
+                        + EColor.RED.value[0] * self.red_percent / 100,
+                        cell_color[1] * (100 - self.red_percent) / 100
+                        + EColor.RED.value[1] * self.red_percent / 100,
+                        cell_color[2] * (100 - self.red_percent) / 100
+                        + EColor.RED.value[2] * self.red_percent / 100,
+                    )
+
+                self.red_percent = max(0, self.red_percent - 1)
 
                 if outer_line:
                     pygame.draw.rect(

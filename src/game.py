@@ -6,11 +6,18 @@ from .classes.Exception import GameError
 
 
 class Game:
-    def __init__(self, words: list[str], n_tries: int = 6) -> None:
+    def __init__(
+            self,
+            words: list[str],
+            n_tries: int = 6,
+            cheat: bool = False
+    ) -> None:
+        self.cheat = cheat
         self.words_set = set(words)
         self.words_list = list(self.words_set)
         self.word = random.choice(self.words_list)
-        print(self.word)
+        if cheat:
+            print(self.word)
         self.n_tries: int = n_tries
         self.tries: list[tuple[str, list[EColor]]] = []
 
@@ -76,4 +83,5 @@ class Game:
     def reset_game(self) -> None:
         self.tries = []
         self.new_word()
-        print(self.word)
+        if self.cheat:
+            print(self.word)
