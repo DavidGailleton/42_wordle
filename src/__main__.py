@@ -14,10 +14,6 @@ def main() -> int:
     """
     try:
         pygame.init()
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
     except Exception as error:
         print(f"Error: {error}")
         return 1
