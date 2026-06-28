@@ -2,6 +2,10 @@ from enum import Enum
 
 
 class EColor(Enum):
-    GREY = (192, 192, 192)
-    YELLOW = (255, 255, 51)
-    GREEN = (102, 255, 102)
+    GREY = (58, 58, 60)
+    YELLOW = (181, 159, 59)
+    GREEN = (83, 141, 78)
+    RED = (255, 44, 44)
+    BACKGROUND = (18, 18, 19)
+    OUTER_LINE = (58, 58, 60)
+    CELL = (18, 18, 19)
