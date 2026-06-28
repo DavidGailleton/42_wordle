@@ -46,7 +46,7 @@ class Game:
             letter: self.word.count(letter) for letter in self.word
         }
 
-        try_number_of_letter = {}
+        try_number_of_letter: dict = {}
 
         res: tuple[str, list[EColor | None]] = (_try, [None] * 5)
 
