@@ -7,6 +7,7 @@ CELLS_PADDING_RATIO = 0.05
 BORDER_PADDING_RATIO = 0.1
 OUTER_LINE_RATIO = 0.03
 FONT_RATIO = 0.07
+END_SCREEN_PADDING_RATIO = 0.1
 
 
 class Renderer:
@@ -25,10 +26,54 @@ class Renderer:
                               - self.cells_padding * 4) / 5)
         self.outer_line = int(self.cell_size * OUTER_LINE_RATIO)
 
+        self.end_screen_padding = END_SCREEN_PADDING_RATIO * self.height
         pannel_size = self.cell_size * self.game.n_tries + \
             self.cells_padding * (self.game.n_tries)
         self.start_y = int((self.height - pannel_size) / 2)
         self.font = pygame.font.SysFont(None, int(FONT_RATIO * self.height))
+
+    def end_screen(self) -> None:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                self.running = False
+
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                self.game.reset_game()
+                self.buffer = []
+                return
+
+        pygame.draw.rect(
+            self.screen,
+            EColor.BACKGROUND.value,
+            (0, 0, self.width, self.height)
+        )
+        to_draw = ("You lost !", EColor.RED.value)
+        if self.game.is_win():
+            to_draw = ("You won !", EColor.GREEN.value)
+
+        text = self.font.render(
+            to_draw[0],
+            True,
+            to_draw[1]
+        )
+        cx = self.width // 2
+        cy = int(self.height // 2.5) - self.end_screen_padding // 2
+        rect = text.get_rect(center=(cx, cy))
+        self.screen.blit(text, rect)
+
+        text = self.font.render(
+            f"The word was {self.game.word}",
+            True,
+            (255, 255, 255)
+        )
+        cx = self.width // 2
+        cy = int(self.height // 2.5) + self.end_screen_padding // 2
+        rect = text.get_rect(center=(cx, cy))
+        self.screen.blit(text, rect)
+
+        pygame.display.flip()
 
     def update(self) -> None:
         for event in pygame.event.get():
@@ -52,8 +97,8 @@ class Renderer:
                     _try = ""
                     for c in self.buffer:
                         _try += c
-                    self.game.add_try(_try)
-                    self.buffer = []
+                    if self.game.add_try(_try):
+                        self.buffer = []
 
         pygame.draw.rect(
             self.screen,

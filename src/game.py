@@ -10,6 +10,7 @@ class Game:
         self.words_set = set(words)
         self.words_list = list(self.words_set)
         self.word = random.choice(self.words_list)
+        print(self.word)
         self.n_tries: int = n_tries
         self.tries: list[tuple[str, list[EColor]]] = []
 
@@ -71,3 +72,8 @@ class Game:
 
     def new_word(self) -> None:
         self.word = random.choice(self.words_list)
+
+    def reset_game(self) -> None:
+        self.tries = []
+        self.new_word()
+        print(self.word)

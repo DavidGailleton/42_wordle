@@ -24,23 +24,28 @@ def main() -> int:
         renderer = Renderer(game)
         target_delta = 1.0 / 30
 
-    while renderer.running:
-        start = perf_counter()
-        renderer.update()
-        end = perf_counter()
-        if end - start < target_delta:
-            elapsed = end - start
-            to_sleep = target_delta - elapsed
-            sleep(to_sleep)
+        while renderer.running:
+            start = perf_counter()
+            if game.is_ended():
+                renderer.end_screen()
+            else:
+                renderer.update()
+            end = perf_counter()
+            if end - start < target_delta:
+                elapsed = end - start
+                to_sleep = target_delta - elapsed
+                sleep(to_sleep)
 
         return 0
 
-    # except Exception as error:
-    #     print(f"Error: {error}")
-    #     return 1
+    except Exception as error:
+        print(f"Error: {error}")
+        return 1
 
-    # finally:
-    #     pygame.quit()
+    finally:
+        pygame.quit()
+
+    return 0
 
 
 if __name__ == "__main__":
