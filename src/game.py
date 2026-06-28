@@ -12,6 +12,8 @@ class Game:
             n_tries: int = 6,
             cheat: bool = False
     ) -> None:
+        if n_tries not in range(1, 10):
+            raise Exception("Error: n_tries not in range(1,10)")
         self.cheat = cheat
         self.words_set = set(words)
         self.words_list = list(self.words_set)

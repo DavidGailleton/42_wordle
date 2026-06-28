@@ -20,7 +20,7 @@ def main() -> int:
 
     try:
         words = parsing("words.txt")
-        game = Game(words)
+        game = Game(words, n_tries=6, cheat=False)
         renderer = Renderer(game)
         target_delta = 1.0 / 30
 
